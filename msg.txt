@@ -1,1 +1,1 @@
-\"Initial commit of Auto-GPT project\"  
+\"fix: Add database migration to Dockerfile\"  
