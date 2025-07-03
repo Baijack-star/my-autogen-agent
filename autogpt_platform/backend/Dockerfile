@@ -75,4 +75,8 @@ RUN poetry install --no-ansi --only-root
 
 ENV PORT=8000
 
-CMD ["poetry", "run", "rest"]
+# Copy and set permissions for the start script
+COPY autogpt_platform/backend/start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
