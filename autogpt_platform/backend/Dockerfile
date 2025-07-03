@@ -75,7 +75,4 @@ RUN poetry install --no-ansi --only-root
 
 ENV PORT=8000
 
-# Run database migrations
-RUN poetry run prisma migrate deploy
-
 CMD ["poetry", "run", "rest"]
