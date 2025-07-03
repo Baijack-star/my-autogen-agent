@@ -34,8 +34,12 @@ WORKDIR /app/autogpt_platform/backend
 RUN poetry install --no-ansi --no-root
 
 # Generate Prisma client
-COPY autogpt_platform/backend/schema.prisma ./
+COPY autogpt_platform/backend/schema.prisma ./ 
 RUN poetry run prisma generate
+
+# Copy start script in the builder stage
+COPY autogpt_platform/backend/start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 FROM python:3.11.10-slim-bookworm AS server_dependencies
 
@@ -73,10 +77,9 @@ FROM server_dependencies AS server
 COPY autogpt_platform/backend /app/autogpt_platform/backend
 RUN poetry install --no-ansi --only-root
 
-ENV PORT=8000
+# Copy the start script from the builder stage
+COPY --from=builder /app/start.sh /app/start.sh
 
-# Copy and set permissions for the start script
-COPY autogpt_platform/backend/start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+ENV PORT=8000
 
 CMD ["/app/start.sh"]
